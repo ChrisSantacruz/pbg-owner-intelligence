@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 
 export function AiBrief() {
-  const [brief, setBrief] = useState("Generando briefing con Groq…");
-  const [source, setSource] = useState<"groq" | "heuristic" | "loading">("loading");
+  const [brief, setBrief] = useState("Preparando tu resumen de hoy…");
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
     let alive = true;
@@ -12,13 +12,13 @@ export function AiBrief() {
       .then((r) => r.json())
       .then((d) => {
         if (!alive) return;
-        setBrief(d.brief || "No hay briefing disponible.");
-        setSource(d.source === "groq" ? "groq" : "heuristic");
+        setBrief(d.brief || "Aún no hay resumen disponible.");
+        setReady(true);
       })
       .catch(() => {
         if (!alive) return;
-        setBrief("No se pudo generar el briefing ahora.");
-        setSource("heuristic");
+        setBrief("No pudimos generar el resumen en este momento.");
+        setReady(true);
       });
     return () => {
       alive = false;
@@ -26,21 +26,19 @@ export function AiBrief() {
   }, []);
 
   return (
-    <section className="mt-5 panel p-6 rise">
-      <div className="flex items-center justify-between gap-3">
+    <section id="asesor" className="panel p-5 sm:p-7 rise">
+      <div className="flex items-start justify-between gap-3">
         <div>
-          <p className="text-xs uppercase tracking-[0.18em] text-[var(--accent-2)]">
-            Briefing del dueño
-          </p>
-          <h2 className="display text-2xl mt-1">Pulse AI</h2>
+          <p className="section-label text-[var(--accent-2)]">Asesor Pulse</p>
+          <h2 className="display text-2xl sm:text-3xl mt-1">
+            Qué hacer esta semana
+          </h2>
         </div>
-        <span className="text-[10px] uppercase tracking-[0.16em] text-[var(--muted)] border border-[var(--line)] rounded-full px-3 py-1">
-          {source === "loading" ? "…" : source === "groq" ? "Groq" : "Heurístico"}
-        </span>
+        <span className="chip">{ready ? "Actualizado" : "Cargando"}</span>
       </div>
-      <pre className="mt-4 whitespace-pre-wrap font-sans text-sm leading-relaxed text-[var(--paper)]/90">
+      <div className="mt-4 text-[15px] leading-relaxed text-[var(--paper)]/92 whitespace-pre-wrap">
         {brief}
-      </pre>
+      </div>
     </section>
   );
 }

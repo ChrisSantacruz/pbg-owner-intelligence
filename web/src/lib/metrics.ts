@@ -24,43 +24,42 @@ export function isInflatedContact(row: ActivityRow): boolean {
 const METRIC_DEFS: MetricDef[] = [
   {
     id: "confirmed",
-    label: "Conversaciones confirmadas",
+    label: "Conversaciones reales",
     trust: "high",
     definition:
-      "Disposición humana conversation/appointment, o ≥4 turnos de speakers.",
+      "Hubo diálogo confirmado: el agente lo registró bien, o la llamada tuvo al menos 4 turnos.",
   },
   {
     id: "appointments",
     label: "Citas reales",
     trust: "high",
-    definition: "appointment_type = appointment. Los callbacks no cuentan.",
-    caveat: "Un disposition=appointment sin tipo appointment se trata con cautela.",
+    definition: "Solo citas agendadas de verdad. Un callback no cuenta como cita.",
   },
   {
     id: "carrier",
-    label: "Contestadas (carrier)",
+    label: "Contestadas",
     trust: "low",
-    definition: "Señal del carrier. No prueba conversación.",
-    caveat: "Úsala solo como contacto técnico, nunca como productividad.",
+    definition: "El teléfono dice que contestaron. No prueba que hubo conversación.",
+    caveat: "No uses esto para premiar productividad.",
   },
   {
     id: "inflated",
-    label: "Contacto inflado",
+    label: "Contacto sin prueba",
     trust: "medium",
-    definition: "Carrier answered sin conversación confirmada.",
+    definition: "Aparece como contestada, pero no hay conversación real detrás.",
   },
   {
     id: "premium",
-    label: "Premium en pantalla",
+    label: "Prima en pantalla",
     trust: "medium",
-    definition: "Premium reportado en pantalla del agente.",
-    caveat: "Puede divergir del documento (ej. Maria: screen 89 vs document 65).",
+    definition: "Prima que el agente ve en pantalla al cotizar.",
+    caveat: "A veces no coincide con el documento final.",
   },
   {
     id: "sales",
-    label: "Ventas / Applications",
+    label: "Ventas",
     trust: "high",
-    definition: "Resultados de negocio reportados en el dataset sintético.",
+    definition: "Resultados de negocio que sí mueven la agencia.",
   },
 ];
 
@@ -160,17 +159,17 @@ export function buildAgencySnapshot(): AgencySnapshot {
         : null;
 
     if (!s.isPerson) {
-      s.trustFlags.push("Cuenta no humana — excluida del ranking de negocio.");
+      s.trustFlags.push("Esta cuenta no es un agente. No entra al ranking del equipo.");
     }
     if (shared.has(s.agent)) {
       s.trustFlags.push(
-        `Teléfono compartido con ${notes.shared_phone_pair.filter((n) => n !== s.agent).join(", ")} — atribución de dials poco confiable.`,
+        `Comparte línea con ${notes.shared_phone_pair.filter((n) => n !== s.agent).join(", ")}. No compares marcaciones 1 a 1.`,
       );
     }
     const ov = premiumOverrides.get(s.agent);
     if (ov) {
       s.trustFlags.push(
-        `Premium pantalla (${ov.screen_premium}) ≠ documento (${ov.document_premium}).`,
+        `La prima en pantalla ($${ov.screen_premium}) no coincide con el documento ($${ov.document_premium}).`,
       );
     }
   }
@@ -198,15 +197,15 @@ export function buildAgencySnapshot(): AgencySnapshot {
       : 0;
 
   const insights: string[] = [
-    `Si miras solo "contestadas", sobrestimas el trabajo real: ${totals.inflatedContacts} sesiones tienen carrier answered sin conversación confirmada.`,
-    `${bestConversations.agent} lidera conversaciones confirmadas (${bestConversations.confirmedConversations}); ${bestCloser.agent} lidera ventas (${bestCloser.sales}). No siempre es la misma historia.`,
-    `${mostInflated.agent} concentra más contacto inflado (${mostInflated.inflatedContacts}). Revisa coaching antes de premiar volumen de dials.`,
-    notes.warning + " — las citas reales en este panel solo cuentan appointment_type=appointment.",
+    `Si miras solo llamadas contestadas, te engañas: ${totals.inflatedContacts} contactos no tuvieron conversación real.`,
+    `${bestConversations.agent} lidera conversaciones reales (${bestConversations.confirmedConversations}); ${bestCloser.agent} lidera ventas (${bestCloser.sales}). No siempre es la misma persona.`,
+    `${mostInflated.agent} tiene más contacto sin prueba (${mostInflated.inflatedContacts}). Coachéalo antes de premiar volumen.`,
+    "Los callbacks no son citas. Aquí solo contamos citas verdaderamente agendadas.",
   ];
 
   if (inflateRatio > 0.35) {
     insights.unshift(
-      "Señal de alerta: una parte material del contacto reportado no supera la regla de conversación confirmada.",
+      "Alerta: una parte importante del contacto reportado no tiene conversación real detrás.",
     );
   }
 
@@ -221,10 +220,10 @@ export function buildAgencySnapshot(): AgencySnapshot {
     });
 
   const dataWarnings = [
-    "PBG Billing es cuenta no humana y se excluye de totales de negocio.",
-    `Carlos y Diego comparten teléfono: no uses dials crudos para compararlos 1:1.`,
-    "Premium en pantalla puede no coincidir con documentos (override documentado para Maria).",
-    notes.warning,
+    "Excluimos cuentas internas que no son agentes del ranking del equipo.",
+    "Carlos y Diego comparten línea: no compares sus marcaciones como si fueran independientes.",
+    "La prima en pantalla puede diferir del documento final (caso visible en Maria).",
+    "Un callback no se reporta como cita.",
   ];
 
   return {

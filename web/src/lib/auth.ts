@@ -7,7 +7,7 @@ export { COOKIE_NAME };
 export const DEMO_OWNER = {
   email: "owner@pbg.agency",
   password: "pulse2026",
-  name: "Chris Owner",
+  name: "Director de Agencia",
   role: "agency_owner",
 };
 

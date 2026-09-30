@@ -21,7 +21,7 @@ export default function LoginPage() {
     });
     setLoading(false);
     if (!res.ok) {
-      setError("No pudimos validar esas credenciales.");
+      setError("Correo o contraseña incorrectos.");
       return;
     }
     router.push("/dashboard");
@@ -29,67 +29,61 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="min-h-screen grid lg:grid-cols-[1.15fr_0.85fr]">
-      <section className="relative hidden lg:flex flex-col justify-between p-12 overflow-hidden">
+    <main className="min-h-screen grid lg:grid-cols-[1.1fr_0.9fr]">
+      <section className="relative flex flex-col justify-between p-6 sm:p-10 lg:p-14 overflow-hidden">
         <div
-          className="absolute inset-0 opacity-40"
+          className="absolute inset-0 opacity-35"
           style={{
             backgroundImage:
               "linear-gradient(rgba(243,239,230,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(243,239,230,0.05) 1px, transparent 1px)",
-            backgroundSize: "48px 48px",
+            backgroundSize: "44px 44px",
           }}
         />
         <div className="relative">
-          <p className="text-xs tracking-[0.22em] uppercase text-[var(--muted)]">
-            PBG Consulting
-          </p>
-          <h1 className="display text-6xl leading-[1.05] mt-6 max-w-xl">
+          <p className="section-label">PBG Consulting</p>
+          <h1 className="display text-5xl sm:text-6xl leading-[1.02] mt-4">
             Pulse
           </h1>
-          <p className="mt-5 max-w-md text-lg text-[var(--muted)]">
-            Inteligencia para el dueño de agencia. Separa señal de ruido antes de
-            tomar decisiones de coaching, presupuesto y hiring.
+          <p className="mt-4 max-w-md text-base sm:text-lg text-[var(--muted)] leading-relaxed">
+            La vista del dueño: qué está pasando de verdad en tu agencia, no solo
+            lo que el teléfono reporta.
           </p>
         </div>
-        <div className="relative panel p-6 max-w-md rise">
+        <div className="relative panel p-5 sm:p-6 max-w-md mt-8 lg:mt-0 rise">
           <p className="text-sm text-[var(--accent)] font-medium">
-            Regla de confianza
+            Lo que ves aquí cuenta
           </p>
-          <p className="mt-2 text-[var(--paper)]/90 leading-relaxed">
-            Una conversación real se confirma por disposición humana adecuada o
-            por ≥4 turnos de speakers. Un{" "}
-            <span className="text-[var(--danger)]">carrier answered</span> solo
-            no prueba nada.
+          <p className="mt-2 text-sm sm:text-[15px] text-[var(--paper)]/90 leading-relaxed">
+            Solo marcamos una conversación cuando hubo diálogo real. Una llamada
+            “contestada” sin prueba no infla tus resultados.
           </p>
         </div>
       </section>
 
-      <section className="flex items-center justify-center p-6 sm:p-10">
-        <div className="panel w-full max-w-md p-8 rise">
-          <p className="text-xs tracking-[0.2em] uppercase text-[var(--muted)] lg:hidden">
-            PBG · Pulse
-          </p>
-          <h2 className="display text-3xl mt-2">Entrar como dueño</h2>
+      <section className="flex items-end sm:items-center justify-center p-4 sm:p-8 pb-8">
+        <div className="panel w-full max-w-md p-6 sm:p-8 rise">
+          <h2 className="display text-3xl">Bienvenido</h2>
           <p className="text-sm text-[var(--muted)] mt-2">
-            Auth demo con JWT (httpOnly cookie, HS256, 8h).
+            Accede al panel de tu agencia.
           </p>
 
-          <form onSubmit={onSubmit} className="mt-8 space-y-4">
+          <form onSubmit={onSubmit} className="mt-7 space-y-4">
             <label className="block">
-              <span className="text-sm text-[var(--muted)]">Email</span>
+              <span className="text-sm text-[var(--muted)]">Correo</span>
               <input
-                className="mt-1.5 w-full rounded-xl border border-[var(--line)] bg-black/20 px-4 py-3 outline-none focus:border-[var(--accent)]"
+                className="mt-1.5 w-full rounded-2xl border border-[var(--line)] bg-black/25 px-4 py-3.5 outline-none focus:border-[var(--accent)]"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 autoComplete="username"
+                inputMode="email"
                 required
               />
             </label>
             <label className="block">
-              <span className="text-sm text-[var(--muted)]">Password</span>
+              <span className="text-sm text-[var(--muted)]">Contraseña</span>
               <input
                 type="password"
-                className="mt-1.5 w-full rounded-xl border border-[var(--line)] bg-black/20 px-4 py-3 outline-none focus:border-[var(--accent)]"
+                className="mt-1.5 w-full rounded-2xl border border-[var(--line)] bg-black/25 px-4 py-3.5 outline-none focus:border-[var(--accent)]"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 autoComplete="current-password"
@@ -102,15 +96,11 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-xl bg-[var(--paper)] text-[var(--ink)] font-semibold py-3.5 hover:opacity-90 disabled:opacity-60 transition"
+              className="w-full rounded-2xl bg-[var(--paper)] text-[var(--ink)] font-semibold py-4 hover:opacity-90 disabled:opacity-60 transition active:scale-[0.99]"
             >
-              {loading ? "Validando…" : "Abrir Pulse"}
+              {loading ? "Entrando…" : "Entrar a Pulse"}
             </button>
           </form>
-
-          <p className="mt-5 text-xs text-[var(--muted)] leading-relaxed">
-            Demo: <code>owner@pbg.agency</code> / <code>pulse2026</code>
-          </p>
         </div>
       </section>
     </main>

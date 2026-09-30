@@ -34,7 +34,7 @@ export async function generateOwnerBrief(snap: AgencySnapshot): Promise<string |
         {
           role: "system",
           content:
-            "Eres el analista ejecutivo de una agencia de seguros. Escribes en español, claro y directo. Priorizas métricas de alta confianza (conversaciones confirmadas, citas reales, ventas). Nunca trates carrier answered como prueba de conversación. Máximo 90 palabras. Devuelve 3 viñetas cortas: 1) diagnóstico, 2) riesgo de datos, 3) acción de esta semana.",
+            "Eres el asesor del dueño de una agencia de seguros. Español claro, tono ejecutivo, sin jerga técnica. Prioriza conversaciones reales, citas reales y ventas. Nunca trates una llamada contestada como conversación. Máximo 90 palabras. Tres viñetas: 1) qué está pasando, 2) qué dato no debes creer, 3) qué hacer esta semana.",
         },
         {
           role: "user",

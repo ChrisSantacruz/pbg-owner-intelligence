@@ -2,20 +2,20 @@
 
 :root {
   --ink: #07131c;
-  --ink-2: #102433;
-  --panel: rgba(255, 255, 255, 0.04);
-  --line: rgba(232, 220, 196, 0.14);
-  --paper: #f3efe6;
+  --paper: #f4f0e8;
   --muted: #9aafb8;
   --accent: #d7a13a;
   --accent-2: #2f9e8c;
   --danger: #e07a5f;
   --ok: #7dcea0;
-  --shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
+  --line: rgba(232, 220, 196, 0.14);
+  --shadow: 0 24px 60px rgba(0, 0, 0, 0.32);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 * {
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
 html,
@@ -29,9 +29,9 @@ body {
 body {
   font-family: var(--font-dm), ui-sans-serif, system-ui, sans-serif;
   background:
-    radial-gradient(1200px 600px at 10% -10%, rgba(47, 158, 140, 0.22), transparent 55%),
-    radial-gradient(900px 500px at 90% 0%, rgba(215, 161, 58, 0.18), transparent 50%),
-    linear-gradient(180deg, #0a1822 0%, #07131c 45%, #050d13 100%);
+    radial-gradient(900px 480px at 8% -8%, rgba(47, 158, 140, 0.24), transparent 55%),
+    radial-gradient(700px 420px at 100% 0%, rgba(215, 161, 58, 0.16), transparent 50%),
+    linear-gradient(180deg, #0a1822 0%, #07131c 48%, #050d13 100%);
   background-attachment: fixed;
 }
 
@@ -40,17 +40,26 @@ a {
   text-decoration: none;
 }
 
+button,
+input {
+  font: inherit;
+}
+
 .display {
   font-family: var(--font-fraunces), ui-serif, Georgia, serif;
   letter-spacing: -0.02em;
 }
 
 .panel {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.02));
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.06),
+    rgba(255, 255, 255, 0.025)
+  );
   border: 1px solid var(--line);
   border-radius: 22px;
   box-shadow: var(--shadow);
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(12px);
 }
 
 .trust-high {
@@ -66,7 +75,7 @@ a {
 @keyframes rise {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(12px);
   }
   to {
     opacity: 1;
@@ -75,17 +84,16 @@ a {
 }
 
 .rise {
-  animation: rise 0.55s ease both;
+  animation: rise 0.5s ease both;
 }
-
 .rise-delay-1 {
-  animation-delay: 0.08s;
+  animation-delay: 0.06s;
 }
 .rise-delay-2 {
-  animation-delay: 0.16s;
+  animation-delay: 0.12s;
 }
 .rise-delay-3 {
-  animation-delay: 0.24s;
+  animation-delay: 0.18s;
 }
 
 .bar {
@@ -94,10 +102,86 @@ a {
   background: rgba(255, 255, 255, 0.08);
   overflow: hidden;
 }
-
 .bar > span {
   display: block;
   height: 100%;
   border-radius: inherit;
   background: linear-gradient(90deg, var(--accent-2), var(--accent));
+}
+
+.shell {
+  width: min(1120px, 100%);
+  margin: 0 auto;
+  padding: 16px 16px calc(28px + var(--safe-bottom));
+}
+
+@media (min-width: 640px) {
+  .shell {
+    padding: 28px 24px 40px;
+  }
+}
+
+.section-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.agent-card {
+  width: 100%;
+  text-align: left;
+  border: 1px solid transparent;
+  border-radius: 18px;
+  padding: 14px;
+  background: rgba(255, 255, 255, 0.03);
+  color: inherit;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.agent-card.active {
+  border-color: rgba(215, 161, 58, 0.45);
+  background: rgba(215, 161, 58, 0.08);
+}
+
+.mobile-nav {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 10px 0 14px;
+  margin: 0 -2px;
+  backdrop-filter: blur(10px);
+  scrollbar-width: none;
+}
+.mobile-nav::-webkit-scrollbar {
+  display: none;
+}
+.mobile-nav a {
+  flex: 0 0 auto;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: var(--muted);
+  background: rgba(7, 19, 28, 0.65);
+}
+.mobile-nav a:active {
+  color: var(--paper);
+  border-color: rgba(215, 161, 58, 0.5);
 }

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { DM_Sans, Fraunces } from "next/font/google";
 import "./globals.css";
 
@@ -15,7 +15,20 @@ const fraunces = Fraunces({
 export const metadata: Metadata = {
   title: "Pulse · Inteligencia para el Dueño de Agencia",
   description:
-    "MVP de inteligencia de agencia: métricas confiables, no solo lo que el carrier reporta.",
+    "Entiende qué está pasando de verdad en tu agencia: conversaciones reales, citas y ventas.",
+  applicationName: "Pulse",
+  appleWebApp: {
+    capable: true,
+    title: "Pulse",
+    statusBarStyle: "black-translucent",
+  },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: "#07131c",
 };
 
 export default function RootLayout({
