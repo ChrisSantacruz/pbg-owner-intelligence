@@ -107,7 +107,7 @@ Reglas de confianza:
 - Callback ≠ cita.
 - Si un dato no es confiable, dilo en palabras simples.
 
-Usa solo el contexto provisto. 90-130 palabras. Sin jerga técnica.
+Usa solo el contexto provisto. 90-130 palabras. Sin jerga técnica.`,
       },
       {
         role: "user",
