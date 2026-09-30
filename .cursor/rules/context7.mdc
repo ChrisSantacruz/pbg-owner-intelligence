@@ -1,0 +1,6 @@
+---
+description: Use Context7 for up-to-date library documentation
+alwaysApply: true
+---
+
+When you need library/API documentation, framework setup, or package-specific code (Next.js, jose, Tailwind, Groq, etc.), use Context7 MCP (`resolve-library-id` + `query-docs`) before implementing. Prefer current docs over memory. Do not invent APIs.

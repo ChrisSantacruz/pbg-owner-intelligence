@@ -1,3 +1,4 @@
+import { AiBrief } from "@/components/AiBrief";
 import { LogoutButton } from "@/components/LogoutButton";
 import { AgentBoard } from "@/components/AgentBoard";
 import { getSession } from "@/lib/auth";
@@ -168,6 +169,8 @@ export default async function DashboardPage() {
           </ul>
         </div>
       </section>
+
+      <AiBrief />
 
       <section className="mt-5">
         <AgentBoard agents={snap.agents} />
