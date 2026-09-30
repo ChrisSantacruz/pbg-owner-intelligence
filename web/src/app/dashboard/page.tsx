@@ -1,6 +1,7 @@
 import { AiBrief } from "@/components/AiBrief";
 import { LogoutButton } from "@/components/LogoutButton";
 import { AgentBoard } from "@/components/AgentBoard";
+import { OwnerChat } from "@/components/OwnerChat";
 import { getSession } from "@/lib/auth";
 import { buildAgencySnapshot } from "@/lib/metrics";
 import { redirect } from "next/navigation";
@@ -49,6 +50,7 @@ export default async function DashboardPage() {
       <nav className="mobile-nav lg:hidden" aria-label="Secciones">
         <a href="#resumen">Resumen</a>
         <a href="#asesor">Asesor</a>
+        <a href="#chat">Chat</a>
         <a href="#calidad">Calidad</a>
         <a href="#equipo">Equipo</a>
         <a href="#alertas">Alertas</a>
@@ -106,6 +108,10 @@ export default async function DashboardPage() {
 
       <div className="mt-4 sm:mt-5">
         <AiBrief />
+      </div>
+
+      <div className="mt-4 sm:mt-5">
+        <OwnerChat />
       </div>
 
       <section

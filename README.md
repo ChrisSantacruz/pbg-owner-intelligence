@@ -21,11 +21,13 @@ Auth: JWT HS256 en cookie httpOnly (`pbg_owner_session`, 8h).
 
 ## Qué construimos
 
-1. Login sencillo con JWT.
-2. Overview con insight principal (señal vs ruido).
+1. Login de dueño (sesión segura).
+2. Overview ejecutivo (señal vs ruido) pensado para móvil.
 3. Métricas **definidas antes de mostrarse**, con nivel de confianza.
-4. Ranking de agentes (excluye `PBG Billing`).
-5. Drill-down + acción sugerida + flags de confianza (teléfono compartido Carlos/Diego, premium Maria, etc.).
+4. Ranking de agentes (excluye cuentas no humanas).
+5. Drill-down + acción sugerida + alertas de confianza.
+6. **Asesor Pulse (LLM)**: briefing + chatbot para preguntar por el negocio.
+7. **Carga escalable**: sube otro CSV (+ notas JSON) y analiza con las mismas reglas.
 
 ## Reglas de confianza del dataset
 

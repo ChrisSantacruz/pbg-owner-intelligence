@@ -1,5 +1,11 @@
 import { loadActivity, loadNotes } from "./data";
-import type { ActivityRow, AgencySnapshot, AgentStats, MetricDef } from "./types";
+import type {
+  ActivityRow,
+  AgencySnapshot,
+  AgentStats,
+  DataNotes,
+  MetricDef,
+} from "./types";
 
 /** Human disposition that confirms a real conversation happened. */
 const CONFIRMING_DISPOSITIONS = new Set(["conversation", "appointment"]);
@@ -84,9 +90,12 @@ function emptyStats(agent: string, isPerson: boolean): AgentStats {
   };
 }
 
-export function buildAgencySnapshot(): AgencySnapshot {
-  const rows = loadActivity();
-  const notes = loadNotes();
+export function buildAgencySnapshot(
+  inputRows?: ActivityRow[],
+  inputNotes?: DataNotes,
+): AgencySnapshot {
+  const rows = inputRows ?? loadActivity();
+  const notes = inputNotes ?? loadNotes();
   const nonPerson = new Set(
     Object.entries(notes.known_entities)
       .filter(([, v]) => v === "non_person_account")
