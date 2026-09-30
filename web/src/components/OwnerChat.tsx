@@ -31,7 +31,7 @@ export function OwnerChat() {
     {
       role: "assistant",
       content:
-        "Soy tu asesor Pulse. Pregúntame por tu equipo, citas, ventas o qué dato no debes creer. También puedes cargar otro CSV para analizarlo con las mismas reglas de confianza.",
+        "Soy tu asesor Pulse. Pregúntame por tu equipo, citas, ventas o qué dato no debes creer. Te respondo claro, sin tablas ni tecnicismos. También puedes cargar otro CSV para analizarlo.",
     },
   ]);
   const [input, setInput] = useState("");

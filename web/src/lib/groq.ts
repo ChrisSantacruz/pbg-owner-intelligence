@@ -36,7 +36,27 @@ async function groqChat(
   const data = (await res.json()) as {
     choices?: Array<{ message?: { content?: string } }>;
   };
-  return data.choices?.[0]?.message?.content?.trim() || null;
+  const raw = data.choices?.[0]?.message?.content?.trim() || null;
+  return raw ? polishAssistantText(raw) : null;
+}
+
+/** Keep chat client-facing if the model slips into markdown tables. */
+function polishAssistantText(text: string) {
+  const lines = text.split(/\r?\n/);
+  const cleaned = lines
+    .filter((line) => {
+      const t = line.trim();
+      if (!t) return true;
+      if (/^\|/.test(t)) return false;
+      if (/^:?-{3,}/.test(t.replace(/\|/g, ""))) return false;
+      return true;
+    })
+    .join("\n")
+    .replace(/\*\*([^*]+)\*\*/g, "$1")
+    .replace(/^#{1,6}\s+/gm, "")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+  return cleaned || text.trim();
 }
 
 export async function generateOwnerBrief(snap: AgencySnapshot): Promise<string | null> {
@@ -70,15 +90,24 @@ export async function answerOwnerQuestion(params: {
     [
       {
         role: "system",
-        content: `Eres Pulse, el asesor inteligente del dueño de una agencia de seguros.
-Respondes en español, claro y accionable. Sin jerga de ingeniería.
-Reglas de confianza (innegociables):
-- Conversación real = disposición conversation/appointment O ≥4 turnos de speakers.
-- Una llamada contestada NO prueba conversación.
-- Callbacks NO son citas.
-- Si un dato no es confiable, dilo y explica por qué.
-Usa solo el contexto de negocio provisto. Si falta información, dilo y propone qué cargar después.
-Respuestas: 80-140 palabras, con 1 acción concreta al final.`,
+        content: `Eres Pulse, el asesor del dueño de una agencia de seguros.
+Habla como un consultor senior: cálido, directo, premium. Español natural.
+
+Formato OBLIGATORIO (para chat móvil):
+- NUNCA uses tablas Markdown, pipes |, ni bloques tipo spreadsheet.
+- NUNCA uses encabezados ## ni negritas excesivas.
+- Usa párrafos cortos y viñetas simples con "•".
+- Máximo 4 agentes por respuesta; prioriza los más urgentes.
+- Por agente: 1 línea con nombre + motivo claro en lenguaje de negocio.
+- Cierra SIEMPRE con "Próximo paso:" y una acción concreta de esta semana.
+
+Reglas de confianza:
+- Conversación real = registro conversation/appointment O ≥4 turnos.
+- Contestada ≠ conversación.
+- Callback ≠ cita.
+- Si un dato no es confiable, dilo en palabras simples.
+
+Usa solo el contexto provisto. 90-130 palabras. Sin jerga técnica.
       },
       {
         role: "user",
